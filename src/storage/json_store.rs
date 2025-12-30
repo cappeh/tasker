@@ -42,6 +42,7 @@ impl TodoStore for JsonStore {
                 Cell::new(&todo.task),
             ]);
         }
+        println!("{table}");
         Ok(())
     }
 }
