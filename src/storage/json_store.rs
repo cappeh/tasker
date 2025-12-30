@@ -37,11 +37,13 @@ impl TodoStore for JsonStore {
             .set_header(vec![
                 Cell::new("Id"),
                 Cell::new("Task"),
+                Cell::new("Created_At"),
             ]);
         for todo in &todos {
             table.add_row(vec![
                 Cell::new(todo.id),
                 Cell::new(&todo.task),
+                Cell::new(todo.human_friendly_datetime()),
             ]);
         }
         println!("{table}");
