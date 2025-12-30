@@ -6,4 +6,5 @@ pub trait TodoStore {
     fn load(&self) -> Result<Vec<Todo>, io::Error>;
     fn add(&self, task: String) -> Result<(), io::Error>;
     fn list(&self) -> Result<(), io::Error>;
+    fn delete(&self, id: u64) -> Result<(), io::Error>;
 }

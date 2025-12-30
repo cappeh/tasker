@@ -4,6 +4,7 @@ use clap::{Parser, Subcommand};
 pub enum Commands {
     Add { task: String },
     List,
+    Delete { id: u64 },
 }
 
 #[derive(Debug, Parser)]

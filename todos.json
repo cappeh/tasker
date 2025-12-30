@@ -4,7 +4,7 @@
     "task": "testing out todo"
   },
   {
-    "id": 2,
-    "task": "adding second todo to test Id"
+    "id": 3,
+    "task": "test deleting a task"
   }
 ]

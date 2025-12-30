@@ -20,6 +20,7 @@ fn main() -> Result<(), io::Error> {
     match cli.command {
       Commands::Add { task } => store.add(task)?,
       Commands::List => store.list()?,
+      Commands::Delete { id } => store.delete(id)?, 
     }
     Ok(())
 }

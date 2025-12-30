@@ -47,4 +47,13 @@ impl TodoStore for JsonStore {
         println!("{table}");
         Ok(())
     }
+
+    fn delete(&self, id: u64) -> Result<(), io::Error> {
+        let mut todos = self.load()?;
+        if let Some(pos) = todos.iter().position(|t| t.id == id) {
+            todos.remove(pos);
+        }
+        fs::write(&self.path, serde_json::to_string_pretty(&todos)?)?;
+        Ok(())
+    }
 }
