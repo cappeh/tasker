@@ -1,5 +1,6 @@
 use std::{fs, io};
 use std::path::PathBuf;
+use comfy_table::{Table, Cell, presets::ASCII_FULL};
 
 use crate::storage::store::TodoStore;
 use crate::models::todo::Todo;
@@ -24,6 +25,23 @@ impl TodoStore for JsonStore {
         todo.id = id;
         todos.push(todo);
         fs::write(&self.path, serde_json::to_string_pretty(&todos)?)?;
+        Ok(())
+    }
+
+    pub fn list(&self) -> Result<(), io::Error> {
+        let todos = self.load()?;
+        let mut table = Table::new();
+        table.load_preset(ASCII_FULL)
+            .set_header(vec![
+                Cell::new("Id"),
+                Cell::new("Task"),
+            ]);
+        for todo in &todos {
+            table.add_row(vec![
+                Cell::new(todo.id),
+                Cell::new(&todo.task),
+            ]);
+        }
         Ok(())
     }
 }
