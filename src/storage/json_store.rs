@@ -18,8 +18,10 @@ impl TodoStore for JsonStore {
         Ok(todos)
     }
 
-    pub fn add(&self, todo: Todo) -> Result<(), io::Error> {
+    pub fn add(&self, mut todo: Todo) -> Result<(), io::Error> {
         let mut todos = self.load()?;
+        let id = Todo::next_id(&todos);
+        todo.id = id;
         todos.push(todo);
         fs::write(&self.path, serde_json::to_string_pretty(&todos)?)?;
         Ok(())
