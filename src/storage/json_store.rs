@@ -10,6 +10,11 @@ pub struct JsonStore {
 }
 
 impl TodoStore for JsonStore {
+    fn save(&self, todos: &[Todo]) -> Result<(), io::Error> {
+        fs::write(&self.path, serde_json::to_string_pretty(todos)?)?;
+        Ok(())
+    } 
+
     fn load(&self) -> Result<Vec<Todo>, io::Error> {
         if !self.path.exists() {
             return Ok(vec![]);
@@ -26,7 +31,7 @@ impl TodoStore for JsonStore {
         let todo = Todo::new(id, task);
 
         todos.push(todo);
-        fs::write(&self.path, serde_json::to_string_pretty(&todos)?)?;
+        self.save(&todos)?;
         Ok(())
     }
 
@@ -55,7 +60,7 @@ impl TodoStore for JsonStore {
         if let Some(pos) = todos.iter().position(|t| t.id == id) {
             todos.remove(pos);
         }
-        fs::write(&self.path, serde_json::to_string_pretty(&todos)?)?;
+        self.save(&todos)?;
         Ok(())
     }
 }
