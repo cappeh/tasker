@@ -6,11 +6,11 @@ use crate::storage::store::TodoStore;
 use crate::models::todo::Todo;
 
 pub struct JsonStore {
-    path: PathBuf,
+    pub path: PathBuf,
 }
 
 impl TodoStore for JsonStore {
-    pub fn load(&self) -> Result<Vec<Todo>, io::Error> {
+    fn load(&self) -> Result<Vec<Todo>, io::Error> {
         if !self.path.exists() {
             return Ok(vec![]);
         }
@@ -19,16 +19,18 @@ impl TodoStore for JsonStore {
         Ok(todos)
     }
 
-    pub fn add(&self, mut todo: Todo) -> Result<(), io::Error> {
+    fn add(&self, task: String) -> Result<(), io::Error> {
         let mut todos = self.load()?;
+
         let id = Todo::next_id(&todos);
-        todo.id = id;
+        let todo = Todo::new(id, task);
+
         todos.push(todo);
         fs::write(&self.path, serde_json::to_string_pretty(&todos)?)?;
         Ok(())
     }
 
-    pub fn list(&self) -> Result<(), io::Error> {
+    fn list(&self) -> Result<(), io::Error> {
         let todos = self.load()?;
         let mut table = Table::new();
         table.load_preset(ASCII_FULL)

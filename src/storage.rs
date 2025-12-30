@@ -1,2 +1,2 @@
-mod store;
-mod json_store;
+pub mod store;
+pub mod json_store;
