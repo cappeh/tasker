@@ -3,9 +3,17 @@ use time::UtcDateTime;
 use time::macros::format_description;
 
 #[derive(Debug, Serialize, Deserialize)]
+pub enum Status {
+    ToDo,
+    InProgress,
+    Complete
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Todo {
     pub id: u64,
     pub task: String,
+    pub status: Status,
     pub created_at: UtcDateTime,
 }
 
@@ -14,6 +22,7 @@ impl Todo {
         Todo { 
             id, 
             task,
+            status: Status::ToDo,
             created_at: UtcDateTime::now(),
         }
     }
