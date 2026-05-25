@@ -1,3 +1,5 @@
+use std::fmt;
+
 use serde::{Deserialize, Serialize};
 use time::UtcDateTime;
 use time::macros::format_description;
@@ -7,6 +9,17 @@ pub enum Status {
     ToDo,
     InProgress,
     Complete
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let output = match &self {
+            Status::ToDo => "To-Do",
+            Status::InProgress => "In-Progress",
+            Status::Complete => "Complete",
+        };
+        write!(f, "{}", output)
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
