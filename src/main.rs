@@ -2,13 +2,12 @@ use std::io;
 
 use clap::Parser;
 
-use crate::{cli::{Cli, Commands}, 
-    storage::{json_store::JsonStore, store::TodoStore}
-};
+use crate::{cli::{Cli, Commands}};
+use store::{TodoStore, JsonStore};
 
-mod models;
-mod storage;
 mod cli;
+mod store;
+mod todo;
 
 fn main() -> Result<(), io::Error> {
     let cli = Cli::parse();

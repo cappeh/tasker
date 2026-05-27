@@ -1,9 +1,16 @@
 use std::{fs, io};
 use std::path::PathBuf;
 use comfy_table::{Table, Cell, presets::ASCII_FULL};
+use crate::todo::Todo;
 
-use crate::storage::store::TodoStore;
-use crate::models::todo::Todo;
+pub trait TodoStore {
+    fn save(&self, todos: &[Todo]) -> Result<(), io::Error>;
+    fn load(&self) -> Result<Vec<Todo>, io::Error>;
+    fn add(&self, task: String) -> Result<(), io::Error>;
+    fn list(&self) -> Result<(), io::Error>;
+    fn delete(&self, id: u64) -> Result<(), io::Error>;
+}
+
 
 pub struct JsonStore {
     pub path: PathBuf,
