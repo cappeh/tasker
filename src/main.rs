@@ -1,16 +1,15 @@
-use std::io;
-
 use clap::Parser;
 
 use crate::{cli::{Cli, Commands}};
 use store::{TodoStore, JsonStore};
+use crate::error::TaskerError;
 
 mod cli;
 mod store;
 mod todo;
 mod error;
 
-fn main() -> Result<(), io::Error> {
+fn main() -> Result<(), TaskerError> {
     let cli = Cli::parse();
 
     let store = JsonStore{
