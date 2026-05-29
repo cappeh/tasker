@@ -8,6 +8,7 @@ use store::{TodoStore, JsonStore};
 mod cli;
 mod store;
 mod todo;
+mod error;
 
 fn main() -> Result<(), io::Error> {
     let cli = Cli::parse();
