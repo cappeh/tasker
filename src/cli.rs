@@ -2,7 +2,7 @@ use clap::{Parser, Subcommand};
 
 #[derive(Debug, Subcommand)]
 pub enum Commands {
-    Add { task: String },
+    Add(AddCmd),
     List,
     Delete { id: u64 },
 }
@@ -11,4 +11,12 @@ pub enum Commands {
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
+}
+
+#[derive(Debug, Parser)]
+pub struct AddCmd {
+    #[arg(short, long)]
+    pub task: String,
+    #[arg(short, long)]
+    pub desc: Option<String>,
 }

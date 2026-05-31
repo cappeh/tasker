@@ -26,15 +26,17 @@ impl fmt::Display for Status {
 pub struct Todo {
     pub id: u64,
     pub task: String,
+    pub description: Option<String>,
     pub status: Status,
     pub created_at: UtcDateTime,
 }
 
 impl Todo {
-    pub fn new(id: u64, task: String) -> Self {
+    pub fn new(id: u64, task: String, desc: String) -> Self {
         Todo { 
             id, 
             task,
+            description: Some(desc),
             status: Status::ToDo,
             created_at: UtcDateTime::now(),
         }

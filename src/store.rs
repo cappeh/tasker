@@ -2,12 +2,12 @@ use crate::error::TaskerError;
 use crate::todo::Todo;
 use comfy_table::{Cell, Table, presets::ASCII_FULL};
 use std::path::PathBuf;
-use std::{fs, io};
+use std::fs;
 
 pub trait TodoStore {
     fn save(&self, todos: &[Todo]) -> Result<(), TaskerError>;
     fn load(&self) -> Result<Vec<Todo>, TaskerError>;
-    fn add(&self, task: String) -> Result<(), TaskerError>;
+    fn add(&self, task: String, desc: Option<String>) -> Result<(), TaskerError>;
     fn list(&self) -> Result<(), TaskerError>;
     fn delete(&self, id: u64) -> Result<(), TaskerError>;
 }
@@ -35,11 +35,12 @@ impl TodoStore for JsonStore {
         Ok(todos)
     }
 
-    fn add(&self, task: String) -> Result<(), TaskerError> {
+    fn add(&self, task: String, desc: Option<String>) -> Result<(), TaskerError> {
         let mut todos = self.load()?;
 
         let id = Todo::next_id(&todos);
-        let todo = Todo::new(id, task);
+        let desc = desc.unwrap_or("".into());
+        let todo = Todo::new(id, task, desc);
 
         todos.push(todo);
         self.save(&todos)?;
