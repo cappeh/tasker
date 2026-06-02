@@ -39,8 +39,7 @@ impl TodoStore for JsonStore {
         let mut todos = self.load()?;
 
         let id = Todo::next_id(&todos);
-        let desc = desc.unwrap_or("".into());
-        let todo = Todo::new(id, task, desc);
+        let todo = Todo::new(id, task, desc.unwrap_or_default());
 
         todos.push(todo);
         self.save(&todos)?;
