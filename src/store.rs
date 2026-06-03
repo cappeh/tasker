@@ -30,8 +30,13 @@ impl TodoStore for JsonStore {
         if !self.path.exists() {
             return Ok(vec![]);
         }
-        let data = fs::read_to_string(&self.path).map_err(|_| TaskerError::ReadError("Error Reading JSON".into()))?;
-        let todos = serde_json::from_str(&data).map_err(|_| TaskerError::JsonError("Error Deserializing JSON".into()))?;
+
+        let file = fs::File::open(&self.path)
+            .map_err(|e| TaskerError::ReadError(e.to_string()))?;
+
+        let todos = serde_json::from_reader(file)
+            .map_err(|e| TaskerError::JsonError(e.to_string()))?;
+
         Ok(todos)
     }
 
