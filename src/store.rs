@@ -16,6 +16,19 @@ pub struct JsonStore {
     pub path: PathBuf,
 }
 
+impl JsonStore {
+    pub fn new() -> Self {
+        let dir = match std::env::var_os("_TASKER_DATA_DIR") {
+            Some(path) => PathBuf::from(path),
+            None => dirs::data_local_dir().unwrap().join("tasker")
+        };
+
+        fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("db.json");
+        Self { path }
+    }
+}
+
 impl TodoStore for JsonStore {
     fn save(&self, todos: &[Todo]) -> Result<(), TaskerError> {
         let file = fs::File::create(&self.path)

@@ -13,9 +13,7 @@ mod output;
 pub fn run() -> Result<(), TaskerError> {
     let cli = Cli::parse();
 
-    let store = JsonStore{
-        path: "todos.json".into()
-    };
+    let store = JsonStore::new();
 
     cli.run(store)?;
     Ok(())
