@@ -1,5 +1,5 @@
 use crate::error::TaskerError;
-use crate::todo::Todo;
+use crate::todo::{Status, Todo};
 use comfy_table::{Cell, Table, presets::ASCII_FULL};
 use std::path::PathBuf;
 use std::fs;
@@ -10,6 +10,7 @@ pub trait TodoStore {
     fn add(&self, task: String, desc: Option<String>) -> Result<(), TaskerError>;
     fn list(&self) -> Result<(), TaskerError>;
     fn delete(&self, id: u64) -> Result<(), TaskerError>;
+    fn update_status(&self, id: u64, status: Status) -> Result<(), TaskerError>;
 }
 
 pub struct JsonStore {
@@ -84,6 +85,19 @@ impl TodoStore for JsonStore {
                 Ok(())
             }
             None => Err(TaskerError::InvalidId(id)),
+        }
+    }
+
+    fn update_status(&self, id: u64, status: Status) -> Result<(), TaskerError> {
+        let mut todos = self.load()?;
+
+        match todos.iter().position(|t| t.id == id) {
+            Some(pos) => {
+                todos[pos].status = status;
+                self.save(&todos)?;
+                Ok(())
+            }
+            None => Err(TaskerError::InvalidId(id))
         }
     }
 }

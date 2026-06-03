@@ -21,7 +21,8 @@ fn main() -> Result<(), TaskerError> {
             store.add(task, desc)?;
         },
       Commands::List => store.list()?,
-      Commands::Delete { id } => store.delete(id)?, 
+      Commands::Delete { id } => store.delete(id)?,
+      Commands::Update { id, status } => store.update_status(id, status)?  
     }
     Ok(())
 }

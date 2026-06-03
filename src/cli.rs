@@ -1,10 +1,12 @@
 use clap::{Parser, Subcommand};
+use crate::todo::Status;
 
 #[derive(Debug, Subcommand)]
 pub enum Commands {
     Add(AddCmd),
     List,
     Delete { id: u64 },
+    Update { id: u64, status: Status }
 }
 
 #[derive(Debug, Parser)]

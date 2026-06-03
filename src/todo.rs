@@ -3,8 +3,9 @@ use std::fmt;
 use serde::{Deserialize, Serialize};
 use time::UtcDateTime;
 use time::macros::format_description;
+use clap::ValueEnum;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, ValueEnum, Clone)]
 pub enum Status {
     ToDo,
     InProgress,
