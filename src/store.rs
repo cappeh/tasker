@@ -13,7 +13,7 @@ pub trait TodoStore {
 }
 
 pub struct JsonStore {
-    pub path: PathBuf,
+    path: PathBuf,
 }
 
 impl JsonStore {
@@ -74,6 +74,12 @@ impl TodoStore for JsonStore {
         match todos.iter().position(|t| t.id == id) {
             Some(pos) => {
                 todos.remove(pos);
+
+                // Renumber IDs so they stay sequential
+                for (i, todo) in todos.iter_mut().enumerate() {
+                    todo.id = (i as u64) + 1;
+                }
+
                 self.save(&todos)?;
                 Ok(())
             }
