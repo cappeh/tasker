@@ -1,4 +1,7 @@
 use clap::{Parser, Subcommand};
+use crate::error::TaskerError;
+use crate::output::print_todos;
+use crate::store::TodoStore;
 use crate::todo::Status;
 
 #[derive(Debug, Subcommand)]
@@ -21,4 +24,21 @@ pub struct AddCmd {
     pub task: String,
     #[arg(short, long)]
     pub desc: Option<String>,
+}
+
+impl Cli {
+    pub fn run<S: TodoStore>(self, store: S) -> Result<(), TaskerError> {
+        match self.command {
+            Commands::Add(AddCmd { task, desc }) => {
+                store.add(task, desc)?;
+            },
+            Commands::List => {
+                let todos = store.list()?;
+                print_todos(&todos);
+            },
+            Commands::Delete { id } => store.delete(id)?,
+            Commands::Update { id, status } => store.update_status(id, status)?
+        }
+        Ok(())
+    }
 }
