@@ -44,7 +44,7 @@ impl Todo {
     }
 
     pub fn next_id(todos: &[Todo]) -> u64 {
-        todos.iter().map(|t| t.id).max().unwrap_or(0) + 1
+        todos.iter().max_by_key(|t|t.id).map(|t| t.id + 1).unwrap_or(1)
     }
 
     pub fn human_friendly_datetime(&self) -> String {
