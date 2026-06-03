@@ -18,11 +18,11 @@ pub struct JsonStore {
 
 impl TodoStore for JsonStore {
     fn save(&self, todos: &[Todo]) -> Result<(), TaskerError> {
-        let contents = serde_json::to_string_pretty(todos)
-            .map_err(|_| TaskerError::JsonError("Error Serializing Todos to JSON".into()))?;
+        let file = fs::File::create(&self.path)
+            .map_err(|e| TaskerError::ReadError(e.to_string()))?;
 
-        fs::write(&self.path, contents)
-            .map_err(|_| TaskerError::WriteError("Error Writing Todos to JSON".into()))?;
+        serde_json::to_writer_pretty(file, todos)
+            .map_err(|e| TaskerError::WriteError(e.to_string()))?;
         Ok(())
     }
 
