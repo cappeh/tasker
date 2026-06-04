@@ -7,7 +7,7 @@ pub trait TodoStore {
     fn save(&self, todos: &[Todo]) -> Result<(), TaskerError>;
     fn load(&self) -> Result<Vec<Todo>, TaskerError>;
     fn add(&self, task: String, desc: Option<String>) -> Result<(), TaskerError>;
-    fn list(&self) -> Result<Vec<Todo>, TaskerError>;
+    fn list(&self, status: Option<Status>) -> Result<Vec<Todo>, TaskerError>;
     fn delete(&self, id: u64) -> Result<(), TaskerError>;
     fn update_status(&self, id: u64, status: Status) -> Result<(), TaskerError>;
 }
@@ -64,8 +64,13 @@ impl TodoStore for JsonStore {
         Ok(())
     }
 
-    fn list(&self) -> Result<Vec<Todo>, TaskerError> {
-        Ok(self.load()?)
+    fn list(&self, status: Option<Status>) -> Result<Vec<Todo>, TaskerError> {
+        let mut todos = self.load()?;
+        if let Some(status) = status {
+            todos = todos.into_iter().filter(|t| t.status == status)
+                .collect()
+        }
+        Ok(todos)
     }
 
     fn delete(&self, id: u64) -> Result<(), TaskerError> {

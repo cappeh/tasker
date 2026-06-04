@@ -7,7 +7,10 @@ use crate::todo::Status;
 #[derive(Debug, Subcommand)]
 pub enum Commands {
     Add(AddCmd),
-    List,
+    List {
+        #[arg(short, long)]
+        status: Option<Status>
+    },
     Delete { id: u64 },
     Update { id: u64, status: Status }
 }
@@ -32,8 +35,8 @@ impl Cli {
             Commands::Add(AddCmd { task, desc }) => {
                 store.add(task, desc)?;
             },
-            Commands::List => {
-                let todos = store.list()?;
+            Commands::List { status } => {
+                let todos = store.list(status)?;
                 print_todos(&todos);
             },
             Commands::Delete { id } => store.delete(id)?,
